@@ -3,8 +3,6 @@
 #include<stdlib.h>
 #include<unistd.h> 
 
-
-
 // Colors
 #define ll long long int
 #define BLUE "\033[1;34m"
@@ -14,6 +12,7 @@
 #define CYAN "\033[0;36m"
 #define clear printf("\033[H\033[J")
 
+// SIZE 
 #define SIZE 1000000
 
 char systemname[SIZE];

@@ -1,92 +1,76 @@
 #include "main.h"
+ int checkOnce = 0;
 
-
-
-void getInputToTerminal(){     // fetches command from terminal
+// takes input from the terminal
+void getInputToTerminal(){     
     inputGiven = (char *)malloc(SIZE);
 
+    // Checking memory allocation error
     if(inputGiven == NULL){
         fprintf(stderr,"Oops! Memory Error!\n");
+        return;
     }
+
+    // Taking Input
     int checkError = gets(inputGiven);
     if (checkError == -1) {
-        // overkill();
-        exit(0);
+        fprintf(stderr,"Oops! Input Error!\n");
+        return;
     }
+
+    // Checking the clear condition
     if (strcmp(inputGiven, "clear") == 0) {
         clear;
     }
 }
 
-void getCommand() {
-    command = (char *)malloc(SIZE);
-
-    if(command == NULL){
-        fprintf(stderr,"Oops! Memory Error!\n");
-    }
-    int length = strlen(inputGiven);
-    for (int i = 0; i < length; i++) {
-        if (inputGiven[i] == ' ') {
-            break;
-        }else {
-            command[i] = inputGiven[i];
-        }
-    }
-}
-
-void getCurrentDirectory(){     // stores the current dir to currdir
+// stores the current dir to currdir
+void getCurrentDirectory(){   
     if(getcwd(currentDir, SIZE) == NULL) {
         perror("");
         exit(0);
     }
-    // tilda_adder(currentDir);
     return;
 }
 
-void getHomeDirectory(){     // stores home dir to homedir
-    if(getcwd(homeDir, SIZE) == NULL) {
-        perror("");
-        exit(0);
-    }
-    return;
-}
-
-void storePreviousPath() {
+// Stores the home directory - initiliazed only once in the whole program.
+void getPseudoHome() {
     getCurrentDirectory();
-    getHomeDirectory();
-    strcpy(previousDir, homeDir);
+    strcpy(pseudoHome, currentDir);
 }
-
 
 
 int main()
 {
+    //Getting the username of the current active user
+    getlogin_r(username, sizeof(username)); 
+
+    //Getting the systemname 
+    gethostname(systemname, sizeof(systemname));
+
+    // Prints the welcome post.
     welcomePrompt();
+
+    // Store the home initially.
+    getPseudoHome();
+
+    // Initially lastCD = home path only.
+    strcpy(lastCD, pseudoHome);
+     
+
     while (1)
     {   
         getCurrentDirectory();
-        getHomeDirectory();
-
-        // Prints the welcome message
-        promptPrint();
-
         
+        // Prints the welcome message
+        printInPrompt();
 
         // Takes the full command with the arguments
         getInputToTerminal();
 
-        // Stores the path of the previous directory
-        storePreviousPath();
-
-        // Store the command
-        getCommand();
-
-        // Check commands
-        if (strcmp(inputGiven, "cd") == 0) {
-            cd(3, currentDir);
-        }
-
-        
-        
+        // Checks commands
+        commandHandler();
+ 
     }
+    return 0;
 }

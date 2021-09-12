@@ -1,55 +1,85 @@
 #include "main.h"
 
+// Function that prints the Welcome in prompt.
 void welcomePrompt() {
+    clear;
     printf(RED);
-    printf("-----------------------------------------------------------\n");
-    printf("Hey! I am ");
+    printf("********************************************************\n");
     printf(CYAN);
-    printf("Angel, ");
+    printf("Hey! %s I am Angel, your Shell\n",username);
     printf(RED);
-    printf("your Psuedo Shell\n");
-    printf("-----------------------------------------------------------\n\n");   
+    printf("********************************************************\n\n");
+
 }
 
 // This function checks if I have to add telda(~) or not.
-// If we are at the home directory or the length of the pseudoDir = 0 then no need to add ~.
+// If we are at the home directory or the length of the pseudoHome == currentDirectory then add ~.
 int ifAddTelda() {
-    return strlen(pseudoDir) == 0;
+    if (strcmp(currentDir, pseudoHome) == 0) {
+        strcpy(directory, "~");
+    }
 }
 
-// This function finds the left part of the directory.
-void getPsuedoCurrentDir() {
-    // strcat(currentDir, "/abc");
-    int l1 = strlen(currentDir);
-    int l2 = strlen(homeDir);
-    if (l1 == l2) {
-        strcpy(pseudoDir, "");
-        return;
-    }else {
-        for (int i = l2; i < l1; i++) {
-            pseudoDir[i-l2] = currentDir[i];
+// This updates the relative path stored in directory that we have to move.
+void updateRelativePathToMove() {
+    
+    // Add ~ if needed.
+    ifAddTelda();
+
+    // If the paths are not equal, then we aren't at the home directory.
+    if (strcmp(currentDir, pseudoHome) != 0) {
+
+        // This is the first non-matched index
+        int nonMatchedIndex = 0;
+
+        int index = 0;
+        for (index; pseudoHome[index]; index++)
+        {
+            if (pseudoHome[index] != currentDir[index])
+            {
+                nonMatchedIndex = index;
+                break;
+            }
+        }
+
+        // If the value of the first non-matched index = 0 then we have to copy the currentpath to directoty.
+        if (nonMatchedIndex != 0) {
+            strcpy(directory, currentDir);
+        }
+        else {
+            // Else found the relative path
+            directory[0] = '~';
+            ll p, j;
+            for (p = 1, j = index; currentDir[j]; p++, j++)
+            {
+                directory[p] = currentDir[j];
+            }
+            directory[p] = '\0';
         }
     }
 }
 
-// This function prints the prompt.
-void promptPrint() {
-    getlogin_r(username, sizeof(username)); //Getting the username of the current active user
-    gethostname(systemname, sizeof(systemname));
-    printf(GREEN); 
-    printf("<%s@%s",username, systemname);
+// Main function to print the content
+void printInPrompt() {
+    strcpy(directory, "");
+    getCurrentDirectory();
+    
+    // Update the path
+    updateRelativePathToMove();
+
+    // Printing everything
+    printMaterial();
+
+}
+
+// Prints the material/content to the prompt.
+void printMaterial() {
+    printf(GREEN);
+    printf("<%s@%s", username, systemname);
     printf(WHITE);
     printf(":");
     printf(BLUE);
-    getPsuedoCurrentDir();
-    printf("%s", pseudoDir);
-
-    // Checking if I have to add telda(~) or not
-    if (ifAddTelda() == 1) {
-        printf("~");
-    }
-
-    printf("> ");
+    printf("%s> ", directory);
     printf(WHITE);
 }
 

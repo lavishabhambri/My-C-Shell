@@ -2,61 +2,55 @@
 
 void cd(long long int numArgs, char *commandArgument) {
 
-    // Throw an error if numArgs > 2
+    // Throw an error if no. of Arguments to the cd command > 2
     if (numArgs > 2) {
-        printf(stderr, "cd : too many arguments have been passed!");
+        printf(stderr, "Error : too many arguments have been passed!");
         return;
     }
-    // Means we have to move to the home directory
+
+    // Means we have to move to the home directory as only cd is passed
     else if (numArgs == 1) {
+
+        // Get the current directory
         getCurrentDirectory();
-        strcpy(previousDir,currentDir);
-        if(chdir(homeDir)<0){
+        strcpy(pseudoHome, currentDir);
+        if(chdir(pseudoHome) < 0){
             perror("cd ");
+            return;
         }
         getCurrentDirectory();
-        printf("%s", currentDir);
-    }else {
+    }
 
+    // Means we have 2 arguments to the command.
+    else {
+        // Case - Move to the pseudoHome
+        if(strcmp(commandArgument, "~") == 0) {
+            if(chdir(pseudoHome) < 0) {
+                perror("cd ");
+                return;
+            }
+            getCurrentDirectory();
+        }
 
-        getCurrentDirectory();
+        // Case - When we have to store the last cd as well.
+        else if (strcmp(commandArgument, "-") == 0) {
+            printf("%s\n", lastCD);
+            if(chdir(lastCD) < 0) {
+                perror("cd ");
+                return;
+            }
+            strcpy(lastCD, currentDir);
+        }
+
+        // Else move to the directory specified
+        else {
+            if (chdir(commandArgument) < 0) {
+                perror("cd ");
+                return;
+            }
+            getCurrentDirectory();
+        }
+     
     }
     return;
-
 }
-
-
-
-// void cd(ll n,char *commarg[]){                                                            // cd
-//     if(n > 2){
-//         fprintf(stderr,"cd : too many arguments!\n");
-//         latest_status=0;
-//         return;
-//     }
-//     else if(n==1){
-//         getcurdir();
-//         strcpy(prevdir,currdir);
-//         if(chdir(homedir)<0){
-//             latest_status=0;
-//             perror("cd ");
-//         }
-//     }
-//     else {
-//         char path[MA];
-//         strcpy(path,commarg[1]);
-//         if(strcmp(commarg[1],"-")==0){
-//             strcpy(path,prevdir);
-//             printf("%s\n",prevdir);
-//         }
-//         getcurdir();
-//         strcpy(prevdir,currdir);
-
-//         tilda_remover(path);
-//         if(chdir(path)<0){
-//             latest_status=0;
-//             perror("cd ");
-//         }
-//     }
-//     getcurdir();
-//     return;
-// }
