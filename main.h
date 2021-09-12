@@ -6,6 +6,7 @@
 #include "cd.h"
 #include "run.h"
 #include "helpers.h"
+#include "pwd.h"
 
 // Stores the total input given to us
 char *inputGiven;

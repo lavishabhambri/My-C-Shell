@@ -6,7 +6,7 @@ void welcomePrompt() {
     printf(RED);
     printf("********************************************************\n");
     printf(CYAN);
-    printf("Hey! %s I am Angel, your Shell\n",username);
+    printf("Hey! %s I am Angel, your Buddy Shell\n",username);
     printf(RED);
     printf("********************************************************\n\n");
 

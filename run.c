@@ -9,7 +9,16 @@ void commandHandler() {
         return;
     
     // Check for cd.
-    if(strcmp(listOfArgs[0], "cd")==0) {
+    if(strcmp(listOfArgs[0], "cd") == 0) {
         cd(totalCommands, listOfArgs[1]);
+    }
+
+    else if(strcmp(listOfArgs[0], "pwd") == 0) {
+        // the no. of arguments should be = 1
+        if (totalCommands != 1) {
+            printf(stderr, "Error : too many arguments have been passed!");
+            return;
+        }
+        pwd();
     }
 }
