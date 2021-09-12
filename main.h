@@ -7,15 +7,13 @@
 #include "run.h"
 #include "helpers.h"
 #include "pwd.h"
+#include "echo.h"
 
 // Stores the total input given to us
 char *inputGiven;
 
-char *command;
-
 // Stores the list of the tokenised(on basis of space) arguments.
 char *listOfArgs[SIZE];
-
 
 // Current Working directory - "/home/lavisha/github/Linux-C-Shell/OTHER_FOLDERS"
 char currentDir[SIZE];
@@ -29,6 +27,9 @@ char directory[SIZE];
 
 // Stores the argument of the last cd command
 char lastCD[SIZE];
+
+// For echo command
+char copyOfInput[SIZE];
 
 // void getCommand();
 void getInputToTerminal();

@@ -22,6 +22,7 @@ void getInputToTerminal(){
     if (strcmp(inputGiven, "clear") == 0) {
         clear;
     }
+    strcpy(copyOfInput, inputGiven);
 }
 
 // stores the current dir to currdir

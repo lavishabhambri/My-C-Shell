@@ -21,4 +21,8 @@ void commandHandler() {
         }
         pwd();
     }
+
+    else if(strcmp(listOfArgs[0], "echo") == 0) {
+        echo();
+    }
 }
