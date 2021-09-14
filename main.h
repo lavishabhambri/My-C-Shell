@@ -14,7 +14,10 @@
 char *inputGiven;
 
 // Stores the list of the tokenised(on basis of space) arguments.
+// char *listOfArgs[SIZE];
 char *listOfArgs[SIZE];
+
+char *listOfCommands[SIZE];
 
 // Current Working directory - "/home/lavisha/github/Linux-C-Shell/OTHER_FOLDERS"
 char currentDir[SIZE];
@@ -35,7 +38,6 @@ char copyOfInput[SIZE];
 // void getCommand();
 void getInputToTerminal();
 void getCurrentDirectory();
-
 void getPseudoHome();
 
 

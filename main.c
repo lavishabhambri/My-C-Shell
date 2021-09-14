@@ -1,5 +1,5 @@
 #include "main.h"
- int checkOnce = 0;
+
 
 // takes input from the terminal
 void getInputToTerminal(){     
@@ -61,6 +61,7 @@ int main()
 
     while (1)
     {   
+        // Get current directory
         getCurrentDirectory();
         
         // Prints the welcome message
