@@ -2,6 +2,14 @@
 #include<string.h>
 #include<stdlib.h>
 #include<unistd.h> 
+#include <sys/types.h>
+#include <dirent.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#include <stdbool.h>
+#include <pwd.h>
+#include <grp.h>
+#include <time.h>
 
 // Colors
 #define ll long long int

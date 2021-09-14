@@ -25,4 +25,8 @@ void commandHandler() {
     else if(strcmp(listOfArgs[0], "echo") == 0) {
         echo();
     }
+
+    else if(strcmp(listOfArgs[0], "ls") == 0) {
+        ls(totalCommands, listOfArgs);
+    }
 }

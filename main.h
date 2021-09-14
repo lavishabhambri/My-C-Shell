@@ -8,6 +8,7 @@
 #include "helpers.h"
 #include "pwd.h"
 #include "echo.h"
+#include "ls.h"
 
 // Stores the total input given to us
 char *inputGiven;
