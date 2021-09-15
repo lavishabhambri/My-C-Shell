@@ -206,9 +206,10 @@ void listDir(char* dirname, bool listAll, bool listLong){
     else {
         while (x < count)
         {   
-            filename = dirEntry[x]->d_name;
+            filename = dirEntry[x] -> d_name;
             if (filename[0] == '.')
-            {
+            {   
+               
                 if(listAll){
 					listFile(dirname, filename, listLong);
 				}
@@ -232,7 +233,6 @@ void ls(long long int argc, char* argv[]){
     // Stores information about the files
 	struct stat sb;
 
-
     // Stores the count of '-'
 	int hiphenCount = getHiphenCount(argc, argv);
 	
@@ -240,7 +240,12 @@ void ls(long long int argc, char* argv[]){
 
     // This function update all the bools of the ls function
     updateLsBools(argc, argv);
+    
+    // Printing the total
+    // if(listLong == true){
+    //     printf("total %ld\n", sb.st_blocks);
 
+    // }
     
 	//if there are no arguments other than '-, 
     // then list what's in the current directory, i.e '.'
@@ -259,6 +264,7 @@ void ls(long long int argc, char* argv[]){
                 perror(filename);
             }
             else{
+                
                 if((sb.st_mode & S_IFMT) == S_IFDIR){
                         if(argc - hiphenCount > 2){
                             printf("%s:\n", filename);
@@ -274,6 +280,7 @@ void ls(long long int argc, char* argv[]){
             }
         }
         else {
+
             //go through each command line argument
             for(int i = 1; i < argc; i++){
 

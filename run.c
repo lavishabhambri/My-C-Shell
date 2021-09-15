@@ -12,12 +12,20 @@ void commandHandler() {
         // If the list is empty then simply return
         if (totalArgsInEachCommand == 0 || listOfArgs[0] == NULL) 
             return;
+
+        // Checking the background process (if at last we have &)
+        if(strcmp(listOfArgs[totalArgsInEachCommand - 1],"&")==0){
+            backgroundProcess(totalArgsInEachCommand, listOfArgs);
+            return;
+        }
         
         // Check for cd.
-        if(strcmp(listOfArgs[0], "cd") == 0) {
+        else if(strcmp(listOfArgs[0], "cd") == 0) {
             cd(totalArgsInEachCommand, listOfArgs[1]);
         }
 
+
+        // Check for pwd
         else if(strcmp(listOfArgs[0], "pwd") == 0) {
             // the no. of arguments should be = 1
             if (totalArgsInEachCommand != 1) {
@@ -27,12 +35,19 @@ void commandHandler() {
             pwd();
         }
 
+        // Check for echo
         else if(strcmp(listOfArgs[0], "echo") == 0) {
             echo(totalArgsInEachCommand, listOfArgs);
         }
 
+        // Check for ls
         else if(strcmp(listOfArgs[0], "ls") == 0) {
             ls(totalArgsInEachCommand, listOfArgs);
+        }
+
+        // Check for pinfo
+        else if(strcmp(listOfArgs[0], "pinfo") == 0) {
+            pinfo(totalArgsInEachCommand, listOfArgs);
         }
     }
     

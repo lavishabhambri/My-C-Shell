@@ -1,0 +1,7 @@
+#ifndef __FOREGROUNDPROCESS_H
+#define __FOREGROUNDPROCESS_H
+
+
+
+
+#endif
