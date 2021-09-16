@@ -1,32 +1,24 @@
 #include "main.h"
 bool listAll = false, listLong = false, dirPresent = false; 
 
-// void printTotal(char filename[], bool listLong ) 
-// {   
-//     struct dirent **read;
-//     long long int n = scandir(filename, &read, NULL, alphasort);
-//     int i = 1;
-//     struct stat s;
-//     stat(filename, &s);
-//     long long int total = 0;
-//     printf("%s", listLong);
-//         if (listLong == true) { // flag if -l is given
-//             while (i < n) {
-//                 char* temp = (char *) malloc(sizeof(filename)+sizeof(read[i]->d_name));
-//                 strcpy(temp, filename); //copy path to temp
-//                 stat(strcat(temp, read[i]->d_name), &s); // we pass path to + name of file
-//                 total += s.st_blocks;
-//                 free(temp);
-//                 free(filename[i++]); // optimization rules!
-//             }
-//             free(filename);
-//             printf("total %d\n", total/2);
-//         }
-//     return;
-// }
 
+void printTotal(DIR *d, struct dirent *dir, char path[]) {
+    long long total = 0;
+    while ((dir = readdir(d)) != NULL)
+    {
+        char myfile[2048];
+        strcpy(myfile, path);
+        strcat(myfile, "/");
+        strcat(myfile, dir->d_name);
 
-
+        struct stat direc = {0};
+        if (stat(myfile, &direc) == 0)
+            total += direc.st_blocks;
+    }
+    printf("total %lld\n", total / 2);
+    rewinddir(d);
+    return;
+}
 
 
 //extract the file's type and permissions from the file's stats and formats the string to encode it
@@ -200,10 +192,23 @@ void listDir(char* dirname, bool listAll, bool listLong){
     struct dirent **dirEntry;
     DIR* dirp;
 	char* filename;
+
+    
+
     ll x = 0, count = scandir(dirname, &dirEntry, NULL, alphasort);
+    
     if (count < 0)
         perror("Error: no such file or directory exists\n");
     else {
+
+        // Print Total only in case of (ls -l) OR (ls -al) OR (ls -la)
+        if (listLong) {
+            struct dirent *dir;
+            dirp = opendir(dirname);
+            printTotal(dirp, dir, dirname);
+            closedir(dirp);
+        }
+
         while (x < count)
         {   
             filename = dirEntry[x] -> d_name;
@@ -240,12 +245,8 @@ void ls(long long int argc, char* argv[]){
 
     // This function update all the bools of the ls function
     updateLsBools(argc, argv);
-    
-    // Printing the total
-    // if(listLong == true){
-    //     printf("total %ld\n", sb.st_blocks);
 
-    // }
+    
     
 	//if there are no arguments other than '-, 
     // then list what's in the current directory, i.e '.'
