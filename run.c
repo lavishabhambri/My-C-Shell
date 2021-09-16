@@ -49,6 +49,17 @@ void commandHandler() {
         else if(strcmp(listOfArgs[0], "pinfo") == 0) {
             pinfo(totalArgsInEachCommand, listOfArgs);
         }
+
+        // Check for fg
+        else if(strcmp(listOfArgs[0], "fg") == 0) {
+            foregroundProcess(totalArgsInEachCommand, listOfArgs);
+        }
+
+        // Check for exit
+        else if(strcmp(listOfArgs[0], "exit") == 0) {
+            forceKill();
+            exit(0);
+        }
     }
     
 

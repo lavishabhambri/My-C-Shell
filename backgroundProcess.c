@@ -34,6 +34,30 @@ void childHandler(ll totalArgsInEachCommand, char *listofArgs[]) {
     exit(0);
 }
 
+void parentHandler(pid_t pid) {
+    // Now store the process details in the processes Arrays
+    // Store pid
+    processesIndex[totalNoOfProcesses] = pid;
+
+    // Get length of the command
+    ll lengthOfCommand = strlen(listOfArgs[0]);
+
+    // create a space in memory
+    processesNames[totalNoOfProcesses] = (char *) malloc(lengthOfCommand * sizeof(char));
+
+    // Copy command into this array
+    strcpy(processesNames[totalNoOfProcesses], listOfArgs[0]);
+
+    // Update the status to 1
+    processesStatus[totalNoOfProcesses] = 1;
+
+    // Inc no. of processes by 1
+    totalNoOfProcesses++;
+
+    printf("[%lld] started %s\n", processesIndex[totalNoOfProcesses - 1], listOfArgs[0]);
+    return;
+}
+
 
 void backgroundProcess(long long int totalArgsInEachCommand, char *listofArgs[]) {
     // Only 2 arguments can be passed to '&'
@@ -56,19 +80,17 @@ void backgroundProcess(long long int totalArgsInEachCommand, char *listofArgs[])
 
             childHandler(totalArgsInEachCommand, &listOfArgs);
         }
+
         // Means PID > 0, i.e. the parent's process
         else {
 
             // *****************DOUBTS*************
-            // if (kill(pid, SIGCONT) < 0) {
-            //     perror("Could not run background process");
-            //     return;
-            // }
-            // if (strcmp(token[0], "vim") == 0)
-            // kill(p, 19);
+            if (kill(pid, SIGCONT) < 0) {
+                perror("Could not run background process");
+                return;
+            }
 
-
-            printf("[%d] started %s\n",pid, listOfArgs[0]);
+            parentHandler(pid);
         }
     }
 }

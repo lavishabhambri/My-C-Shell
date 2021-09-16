@@ -10,6 +10,10 @@
 #include "echo.h"
 #include "ls.h"
 #include "pinfo.h"
+#include "signalHandlers.h"
+#include "forceKill.h"
+
+#include <signal.h>
 
 // Stores the total input given to us
 char *inputGiven;
@@ -36,10 +40,15 @@ char lastCD[SIZE];
 // For echo command
 char copyOfInput[SIZE];
 
+// For storing all the processes that I create
+ll totalNoOfProcesses;
+char *processesNames[SIZE];
+int processesIndex[SIZE];
+ll processesStatus[SIZE];
+
 // void getCommand();
 void getInputToTerminal();
 void getCurrentDirectory();
 void getPseudoHome();
-
 
 #endif

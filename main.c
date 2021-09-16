@@ -58,9 +58,20 @@ int main()
     // Initially lastCD = home path only.
     strcpy(lastCD, pseudoHome);
      
+    // make total no. of processes = 0
+    totalNoOfProcesses = 0;
 
     while (1)
     {   
+        // check if any child process terminated
+        signal(SIGCHLD, sigchildHandler);                         
+
+        // check if SIGTSTP signal is raised (Ctrl + Z) - simply ignore it
+        signal(SIGTSTP, ctrlZHandler);                         
+        
+        // check if SIGINT signal is raised (Ctrl + C) - simply ignore it
+        signal(SIGINT, ctrlCHandler);                           
+
         // Get current directory
         getCurrentDirectory();
         
