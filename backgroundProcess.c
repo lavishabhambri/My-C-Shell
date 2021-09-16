@@ -28,12 +28,11 @@ void childHandler(ll totalArgsInEachCommand, char *listofArgs[]) {
     // Check for the errors.
     if(check_execvp < 0){
         printf(stderr, "Invalid command!\n");
-        exit(EXIT_FAILURE);
+        exit(1);
     }
 
-    exit(EXIT_SUCCESS);
+    exit(0);
 }
-
 
 
 void backgroundProcess(long long int totalArgsInEachCommand, char *listofArgs[]) {
@@ -42,7 +41,7 @@ void backgroundProcess(long long int totalArgsInEachCommand, char *listofArgs[])
         printf(stderr, "Incorrect number of arguments");
         return;
     }
-
+    
     else {
         // Forking child process
         pid_t pid = fork();
@@ -59,6 +58,16 @@ void backgroundProcess(long long int totalArgsInEachCommand, char *listofArgs[])
         }
         // Means PID > 0, i.e. the parent's process
         else {
+
+            // *****************DOUBTS*************
+            // if (kill(pid, SIGCONT) < 0) {
+            //     perror("Could not run background process");
+            //     return;
+            // }
+            // if (strcmp(token[0], "vim") == 0)
+            // kill(p, 19);
+
+
             printf("[%d] started %s\n",pid, listOfArgs[0]);
         }
     }

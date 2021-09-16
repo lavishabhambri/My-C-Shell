@@ -9,6 +9,7 @@
 #include "pwd.h"
 #include "echo.h"
 #include "ls.h"
+#include "pinfo.h"
 
 // Stores the total input given to us
 char *inputGiven;
