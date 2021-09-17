@@ -1,7 +1,6 @@
 #include "main.h"
-#include <signal.h>
 
-void childHandler(ll totalArgsInEachCommand, char *listofArgs[]) {
+void bgChildHandler(ll totalArgsInEachCommand, char *listofArgs[]) {
 
     // Make the child process as the leader of the new group of processes.
     // Setting the process ID of child = Process ID of group
@@ -23,18 +22,18 @@ void childHandler(ll totalArgsInEachCommand, char *listofArgs[]) {
 
     // Overlay's a process that has been created by a call to the fork function.
     // Execute the files.
-    ll check_execvp = execvp(listOfArgs[0],listOfArgs);     
+    ll check_execvp = execvp(listOfArgs[0], listOfArgs);     
     
     // Check for the errors.
     if(check_execvp < 0){
-        printf(stderr, "Invalid command!\n");
+        printf("Invalid command!\n");
         exit(1);
     }
 
     exit(0);
 }
 
-void parentHandler(pid_t pid) {
+void bgParentHandler(pid_t pid) {
     // Now store the process details in the processes Arrays
     // Store pid
     processesIndex[totalNoOfProcesses] = pid;
@@ -54,7 +53,7 @@ void parentHandler(pid_t pid) {
     // Inc no. of processes by 1
     totalNoOfProcesses++;
 
-    printf("[%lld] started %s\n", processesIndex[totalNoOfProcesses - 1], listOfArgs[0]);
+    printf("[%lld] with index [%lld]+ started %s\n", processesIndex[totalNoOfProcesses - 1], totalNoOfProcesses , listOfArgs[0]);
     return;
 }
 
@@ -62,7 +61,7 @@ void parentHandler(pid_t pid) {
 void backgroundProcess(long long int totalArgsInEachCommand, char *listofArgs[]) {
     // Only 2 arguments can be passed to '&'
     if (totalArgsInEachCommand != 2) {
-        printf(stderr, "Incorrect number of arguments");
+        printf("Incorrect number of arguments");
         return;
     }
     
@@ -72,25 +71,24 @@ void backgroundProcess(long long int totalArgsInEachCommand, char *listofArgs[])
 
         // Checking for error
         if (pid < 0) {
-            printf(stderr, "Unable to fork");
+            printf("Unable to fork");
             return;
         }
         // Sending the child process to background
         else if (pid == 0){
 
-            childHandler(totalArgsInEachCommand, &listOfArgs);
+            bgChildHandler(totalArgsInEachCommand, &listOfArgs);
         }
 
         // Means PID > 0, i.e. the parent's process
         else {
 
-            // *****************DOUBTS*************
             if (kill(pid, SIGCONT) < 0) {
                 perror("Could not run background process");
                 return;
             }
 
-            parentHandler(pid);
+            bgParentHandler(pid);
         }
     }
 }

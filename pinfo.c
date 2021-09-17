@@ -35,7 +35,7 @@ void pinfo(long long int totalArgsInEachCommand, char *listofArgs[]) {
 
     // Check if the no. of arguments > 2
     if (totalArgsInEachCommand > 2) {
-        printf(stderr, "Too many arguments");
+        printf("Too many arguments");
         return;
     }
 
@@ -44,7 +44,7 @@ void pinfo(long long int totalArgsInEachCommand, char *listofArgs[]) {
 
     // Check for the error
     if(pid == 0){
-        printf(stderr,"Invalid process ID\n");
+        printf("Invalid process ID\n");
         return;
     }
 
@@ -63,7 +63,7 @@ void pinfo(long long int totalArgsInEachCommand, char *listofArgs[]) {
     
     FILE  *procfileDescriptor = fopen(procFile, "r");
     if(procfileDescriptor == NULL) {
-        fprintf(stderr,"Process with ID %d does not exist!\n",(int)pid);
+        printf("Process with ID %d does not exist!\n",(int)pid);
         return;
     } 
     
@@ -76,7 +76,7 @@ void pinfo(long long int totalArgsInEachCommand, char *listofArgs[]) {
     
     int length = readlink(exeFile, executablePath, sizeof(executablePath));
     if(length < 0){
-        fprintf(stderr,"No path for executable file of process ID %d found!\n", (int)pid);
+        printf("No path for executable file of process ID %d found!\n", (int)pid);
     }
     else{
         executablePath[length] = '\0';

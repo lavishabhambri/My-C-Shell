@@ -7,14 +7,14 @@ void getInputToTerminal(){
 
     // Checking memory allocation error
     if(inputGiven == NULL){
-        fprintf(stderr,"Oops! Memory Error!\n");
+        printf("Oops! Memory Error!\n");
         return;
     }
 
     // Taking Input
     int checkError = gets(inputGiven);
     if (checkError == -1) {
-        fprintf(stderr,"Oops! Input Error!\n");
+        printf("Oops! Input Error!\n");
         return;
     }
 
@@ -43,6 +43,7 @@ void getPseudoHome() {
 
 int main()
 {
+
     //Getting the username of the current active user
     getlogin_r(username, sizeof(username)); 
 

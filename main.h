@@ -12,6 +12,7 @@
 #include "pinfo.h"
 #include "signalHandlers.h"
 #include "forceKill.h"
+#include "fg.h"
 
 #include <signal.h>
 

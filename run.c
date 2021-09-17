@@ -29,7 +29,7 @@ void commandHandler() {
         else if(strcmp(listOfArgs[0], "pwd") == 0) {
             // the no. of arguments should be = 1
             if (totalArgsInEachCommand != 1) {
-                printf(stderr, "Error : too many arguments have been passed!");
+                printf("Error : too many arguments have been passed!");
                 return;
             }
             pwd();
@@ -52,13 +52,22 @@ void commandHandler() {
 
         // Check for fg
         else if(strcmp(listOfArgs[0], "fg") == 0) {
-            foregroundProcess(totalArgsInEachCommand, listOfArgs);
+            fg(totalArgsInEachCommand, listOfArgs);
         }
 
         // Check for exit
         else if(strcmp(listOfArgs[0], "exit") == 0) {
             forceKill();
             exit(0);
+        }
+
+        // Check for repeat
+        else if(strcmp(listOfArgs[0], "repeat") == 0) {
+            repeat(totalArgsInEachCommand, listOfArgs);
+        }
+
+        else {
+            foregroundProcess(totalArgsInEachCommand, listOfArgs);
         }
     }
     
