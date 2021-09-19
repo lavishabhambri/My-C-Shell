@@ -11,6 +11,10 @@ void printTotal(DIR *d, struct dirent *dir, char path[]) {
         strcat(myfile, "/");
         strcat(myfile, dir->d_name);
 
+        // If there is no '.' then don't consider in the total.
+        if (dir->d_name[0] == '.' && !listAll) {
+            continue;
+        }
         struct stat direc = {0};
         if (stat(myfile, &direc) == 0)
             total += direc.st_blocks;

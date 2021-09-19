@@ -71,6 +71,9 @@ void pinfo(long long int totalArgsInEachCommand, char *listofArgs[]) {
     fscanf(procfileDescriptor, "%*d %*s %c %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %lld %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d", &pStatus, &pMemory);
     fclose(procfileDescriptor);
     printf("PID -- %d\n", pid);
+    // for (int i = 0; i < totalNoOfProcesses; i++) {
+    //     if (processesIndex)
+    // }
     printf("Process Status -- %c\n", pStatus);
     printf("Memory -- %lld\n", pMemory);
     

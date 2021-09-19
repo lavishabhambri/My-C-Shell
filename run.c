@@ -50,10 +50,6 @@ void commandHandler() {
             pinfo(totalArgsInEachCommand, listOfArgs);
         }
 
-        // Check for fg
-        else if(strcmp(listOfArgs[0], "fg") == 0) {
-            fg(totalArgsInEachCommand, listOfArgs);
-        }
 
         // Check for exit
         else if(strcmp(listOfArgs[0], "exit") == 0) {

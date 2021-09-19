@@ -12,9 +12,12 @@
 #include "pinfo.h"
 #include "signalHandlers.h"
 #include "forceKill.h"
-#include "fg.h"
 
 #include <signal.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
+#include <unistd.h>
 
 // Stores the total input given to us
 char *inputGiven;
@@ -46,6 +49,9 @@ ll totalNoOfProcesses;
 char *processesNames[SIZE];
 int processesIndex[SIZE];
 ll processesStatus[SIZE];
+
+// For storing Foreground processes
+int foreProcessesID[SIZE];
 
 // void getCommand();
 void getInputToTerminal();

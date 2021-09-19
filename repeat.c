@@ -9,32 +9,55 @@ void repeat (long long int totalArgsInEachCommand, char *listofArgs[]) {
     }
 
     ll repeatTimes = atoi(listOfArgs[1]);
+    char *args[totalArgsInEachCommand - 2];
 
-    char repeatCommand[SIZE];
-    strcpy(repeatCommand, listOfArgs[2]);
+    int k=0;
+    for (int i = 2; i < totalArgsInEachCommand; i++) {
+        int len = strlen(listOfArgs[i]);
+        args[k] = (char *)malloc((len + 2) * sizeof(char));
+        strcpy(args[k], listOfArgs[i]);
+        k++;
+    }
 
-    for (int i = 3; i < totalArgsInEachCommand; i++)
-        strcat(repeatCommand, listOfArgs[i]);
-
-    
-    
-    for (int i = 0; i < repeatTimes; i++) {
-        pid_t pid = fork();
-
-        // Checking for error
-        if (pid < 0) {
-            printf(stderr, "Unable to fork");
-            return;
+    if (strcmp(args[0], "echo") == 0) {
+        for (int i = 0; i < repeatTimes; i++) {
+            echo(totalArgsInEachCommand - 2, args);
         }
-
-        ll check_execvp = execvp(repeatCommand, repeatCommand); 
-
-        if(check_execvp < 0){
-            printf(stderr, "Invalid command!\n");
-            exit(1);
+        return;
+    }
+    else if (strcmp(args[0], "cd") == 0) {
+        for (int i = 0; i < repeatTimes; i++) {
+            cd(totalArgsInEachCommand - 2, args[1]);
         }
+        return;
+    }
+    else if (strcmp(args[0], "pwd") == 0) {
+        for (int i = 0; i < repeatTimes; i++) {
+            pwd(totalArgsInEachCommand - 2, args);
+        }
+        return;
+    }
+    else if (strcmp(args[0], "ls") == 0) {
+        for (int i = 0; i < repeatTimes; i++) {
+            ls(totalArgsInEachCommand - 2, args);
+        }
+        return;
+    }
+
+    // Check for pinfo
+    else if(strcmp(args[0], "pinfo") == 0) {
+        for (int i = 0; i < repeatTimes; i++) {
+            pinfo(totalArgsInEachCommand - 2, args);
+        }
+        return;
+    }
+
+    else {
+        for (int i = 0; i < repeatTimes; i++) {
+            foregroundProcess(totalArgsInEachCommand - 2, args);
+        }
+        return;
     }
     return;
-    
 
 }

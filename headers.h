@@ -10,6 +10,10 @@
 #include <pwd.h>
 #include <grp.h>
 #include <time.h>
+#include <stdlib.h>
+// #include <string.h>
+// #include <stdio.h>
+// #include <unistd.h>
 
 // Colors
 #define ll long long int

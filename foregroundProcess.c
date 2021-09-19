@@ -1,12 +1,12 @@
 #include "main.h"
 
-int fgChildHandler(ll totalArgsInEachCommand, char *listofArgs[]) {
+int fgChildHandler(ll totalArgsInEachCommand, char *repeatArgs[]) {
     // Make the child process as the leader of the new group of processes.
     // Setting the process ID of child = Process ID of group
     setpgid(0, 0);
 
     // Removing the last '&' as we need the name
-    listOfArgs[totalArgsInEachCommand] = NULL;
+    repeatArgs[totalArgsInEachCommand] = NULL;
 
     // For passing the control to signal
     tcsetpgrp(STDIN_FILENO, getpgid(0));
@@ -21,7 +21,7 @@ int fgChildHandler(ll totalArgsInEachCommand, char *listofArgs[]) {
 
     // Overlay's a process that has been created by a call to the fork function.
     // Execute the files.
-    ll check_execvp = execvp(listOfArgs[0], listOfArgs);     
+    ll check_execvp = execvp(repeatArgs[0], repeatArgs);     
     
     // Check for the errors.
     if(check_execvp < 0){
@@ -31,9 +31,10 @@ int fgChildHandler(ll totalArgsInEachCommand, char *listofArgs[]) {
     exit(EXIT_SUCCESS);
 }
 
-void fgParentHandler(ll pid) {
+void fgParentHandler(ll pid, char *repeatArgs[]) {
     char fgCommand[SIZE];
-    strcpy(fgCommand, listOfArgs[0]);
+    strcpy(fgCommand, repeatArgs[0]);
+    
     int status;
 
     // waits for child process(fg)
@@ -46,11 +47,11 @@ void fgParentHandler(ll pid) {
     // Setting the default behaviours.
     signal(SIGTTIN, SIG_DFL);
     signal(SIGTTOU, SIG_DFL);
+        
 
     if(WIFSTOPPED(status)){   // if child is stopped(not killed) by ctrl-z, we can check that by this macro!
-        
         int len = strlen(fgCommand);
-        
+         
         processesIndex[totalNoOfProcesses] = pid;                // push created child to jobs as its suspended in background!
         processesNames[totalNoOfProcesses] = malloc(len * sizeof(char));
         
@@ -60,12 +61,14 @@ void fgParentHandler(ll pid) {
         totalNoOfProcesses++;
         printf("Process %s with process ID [%lld] suspended\n", fgCommand, (ll)pid );
         return;
+    }else{
+        printf("Process %s with process ID [%lld] exited normally\n", fgCommand, (ll)pid );
     }
     
 }
 
 
-void foregroundProcess(long long int totalArgsInEachCommand, char *listofArgs[]) {
+void foregroundProcess(long long int totalArgsInEachCommand, char *repeatArgs[]) {
 
     signal(SIGTTIN, SIG_IGN);
     signal(SIGTTOU, SIG_IGN);
@@ -81,13 +84,13 @@ void foregroundProcess(long long int totalArgsInEachCommand, char *listofArgs[])
     }
     // Sending the child process to background
     else if (pid == 0){
-        // // fgChildHandler(totalArgsInEachCommand, &listOfArgs);
+        // // fgChildHandler(totalArgsInEachCommand, &repeatArgs);
         // // Make the child process as the leader of the new group of processes.
         // // Setting the process ID of child = Process ID of group
         // setpgid(0, 0);
 
         // // Removing the last '&' as we need the name
-        // listOfArgs[totalArgsInEachCommand] = NULL;
+        // repeatArgs[totalArgsInEachCommand] = NULL;
 
         // // For passing the control to signal
         // tcsetpgrp(STDIN_FILENO, getpgid(0));
@@ -102,7 +105,7 @@ void foregroundProcess(long long int totalArgsInEachCommand, char *listofArgs[])
 
         // // Overlay's a process that has been created by a call to the fork function.
         // // Execute the files.
-        // ll check_execvp = execvp(listOfArgs[0], listOfArgs);     
+        // ll check_execvp = execvp(repeatArgs[0], repeatArgs);     
         
         // // Check for the errors.
         // if(check_execvp < 0){
@@ -110,7 +113,7 @@ void foregroundProcess(long long int totalArgsInEachCommand, char *listofArgs[])
         //     exit(EXIT_FAILURE);
         // }
         // exit(EXIT_SUCCESS);
-        fgChildHandler(totalArgsInEachCommand, listOfArgs);
+        fgChildHandler(totalArgsInEachCommand, repeatArgs);
 
     }
 
@@ -120,10 +123,10 @@ void foregroundProcess(long long int totalArgsInEachCommand, char *listofArgs[])
             perror("Could not run background process");
             return;
         }
-        fgParentHandler(pid);
+        fgParentHandler(pid, repeatArgs);
 
     //     char fgCommand[SIZE];
-    //     strcpy(fgCommand, listOfArgs[0]);
+    //     strcpy(fgCommand, repeatArgs[0]);
     //     int status;
 
     //     // waits for child process(fg)

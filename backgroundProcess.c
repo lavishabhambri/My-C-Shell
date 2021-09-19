@@ -53,7 +53,7 @@ void bgParentHandler(pid_t pid) {
     // Inc no. of processes by 1
     totalNoOfProcesses++;
 
-    printf("[%lld] with index [%lld]+ started %s\n", processesIndex[totalNoOfProcesses - 1], totalNoOfProcesses , listOfArgs[0]);
+    printf("[%lld]\n", processesIndex[totalNoOfProcesses - 1]);
     return;
 }
 
