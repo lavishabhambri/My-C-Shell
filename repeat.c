@@ -1,5 +1,6 @@
 #include "main.h"
 
+// This function is for the repeat functionality
 void repeat (long long int totalArgsInEachCommand, char *listofArgs[]) {
 
     // Return if no. of args < 3
@@ -44,7 +45,6 @@ void repeat (long long int totalArgsInEachCommand, char *listofArgs[]) {
         return;
     }
 
-    // Check for pinfo
     else if(strcmp(args[0], "pinfo") == 0) {
         for (int i = 0; i < repeatTimes; i++) {
             pinfo(totalArgsInEachCommand - 2, args);

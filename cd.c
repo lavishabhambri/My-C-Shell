@@ -9,7 +9,7 @@ void cd(long long int numArgs, char *commandArgument) {
     }
 
     // Means we have to move to the home directory as only cd is passed
-    else if (numArgs == 1) {
+    if (numArgs == 1) {
 
         // Get the current directory
         getCurrentDirectory();
@@ -18,7 +18,7 @@ void cd(long long int numArgs, char *commandArgument) {
             perror("cd ");
             return;
         }
-        getCurrentDirectory();
+        strcpy(lastCD, currentDir);
     }
 
     // Means we have 2 arguments to the command.
@@ -29,7 +29,9 @@ void cd(long long int numArgs, char *commandArgument) {
                 perror("cd ");
                 return;
             }
+            strcpy(lastCD, currentDir);
             getCurrentDirectory();
+            
         }
 
         // Case - When we have to store the last cd as well.
@@ -48,6 +50,7 @@ void cd(long long int numArgs, char *commandArgument) {
                 perror("cd ");
                 return;
             }
+            strcpy(lastCD, currentDir);
             getCurrentDirectory();
         }
      

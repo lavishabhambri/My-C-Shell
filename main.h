@@ -11,13 +11,44 @@
 #include "ls.h"
 #include "pinfo.h"
 #include "signalHandlers.h"
-#include "forceKill.h"
+#include "history.h"
+#include "jobs.h"
+#include "bg.h"
+#include "fg.h"
+#include "sig.h"
+#include "redirection.h"
+#include "replay.h"
+#include "dirty.h"
+#include "interrupt.h"
+#include "newborn.h"
 
 #include <signal.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include <fcntl.h>
 #include <unistd.h>
+#include <termios.h>
+
+
+typedef struct job {
+    // For storing all the processes that I create
+    char *jobsNames;
+    int jobsIndex;
+    ll jobsStatus;
+    ll pid;
+}job;
+
+ll totalNoOfJobs;
+
+// This stores the actual list of jobs -> needed for "sig" command
+job myJobs[SIZE];
+
+// This stores the sorted list of jobs for "jobs" command
+job myJobsTemp[SIZE];
+
+// This stores the fg job -> needed for CtrlC & Z command
+job fgJob;
 
 // Stores the total input given to us
 char *inputGiven;
@@ -44,14 +75,14 @@ char lastCD[SIZE];
 // For echo command
 char copyOfInput[SIZE];
 
-// For storing all the processes that I create
-ll totalNoOfProcesses;
-char *processesNames[SIZE];
-int processesIndex[SIZE];
-ll processesStatus[SIZE];
 
 // For storing Foreground processes
 int foreProcessesID[SIZE];
+ll noOfForeProcesses;
+
+// For history
+char historyArray[20][100];
+ll elementsInHistory;
 
 // void getCommand();
 void getInputToTerminal();

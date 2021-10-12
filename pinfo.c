@@ -30,7 +30,7 @@ void printExecutableName() {
 }
 
 
-
+// This functions prints the process info
 void pinfo(long long int totalArgsInEachCommand, char *listofArgs[]) {
 
     // Check if the no. of arguments > 2
@@ -38,6 +38,8 @@ void pinfo(long long int totalArgsInEachCommand, char *listofArgs[]) {
         printf("Too many arguments");
         return;
     }
+
+    
 
     // getting the PID
     pid_t pid = getMyPID(totalArgsInEachCommand, listOfArgs);
@@ -71,14 +73,26 @@ void pinfo(long long int totalArgsInEachCommand, char *listofArgs[]) {
     fscanf(procfileDescriptor, "%*d %*s %c %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %lld %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d %*d", &pStatus, &pMemory);
     fclose(procfileDescriptor);
     printf("PID -- %d\n", pid);
-    // for (int i = 0; i < totalNoOfProcesses; i++) {
-    //     if (processesIndex)
-    // }
-    printf("Process Status -- %c\n", pStatus);
+    
+    int found = 0;
+    for (int i = 0; i < noOfForeProcesses; i++) {
+        if (foreProcessesID[i] == pid) {
+            printf("Process Status -- %c+\n", pStatus);
+            found = 1;
+        }
+    }
+
+    if (totalArgsInEachCommand == 1) {
+        printf("Process Status -- %c+\n", pStatus);
+    }
+
+    if(totalArgsInEachCommand == 2 && found==0) {
+        printf("Process Status -- %c\n", pStatus);
+    }
     printf("Memory -- %lld\n", pMemory);
     
     int length = readlink(exeFile, executablePath, sizeof(executablePath));
-    if(length < 0){
+    if(length < 0) {
         printf("No path for executable file of process ID %d found!\n", (int)pid);
     }
     else{

@@ -1,17 +1,5 @@
 #include "main.h"
 
-
-// For Ctrl + C
-void ctrlCHandler(int sig) {
-    signal(sig, SIG_IGN);
-}
-
-
-// For Ctrl + Z
-void ctrlZHandler(int sig) {
-    signal(sig, SIG_IGN);
-}
-
 // For checking if a process ended or not.
 void sigchildHandler() {
     pid_t pid;
@@ -26,16 +14,14 @@ void sigchildHandler() {
     }
 
     else {
-        for(ll i = 0; i < totalNoOfProcesses; i++){
+        for(ll i = 0; i < totalNoOfJobs; i++){
 
-            if((ll)pid == processesIndex[i]) { 
+            if((ll)pid == myJobs[i].pid) { 
 
                 // check if its a background process.
-                if (processesStatus[i] != -1) {
-                    processesStatus[i] = -1;
-                    // [1]+  Done                    gedit
-                    // printf("Process %s with process ID [%lld] stopped with exit status %d\n",processesNames[i], (ll)pid,status); // throw a message
-                    printf("%s with pid %lld exited normally with exit status %d\n",   processesNames[i], processesIndex[i], status); // throw a message
+                if (myJobs[i].jobsStatus != -1) {
+                    myJobs[i].jobsStatus = -1;
+                        printf("%s with pid %lld exited normally with exit status %d\n",   myJobs[i].jobsNames, myJobs[i].pid, status); 
                     
                     break;
                 }
@@ -45,4 +31,30 @@ void sigchildHandler() {
     return;
 }
 
+// This is the signal controller for CTRL+C and CTRL+Z
+void signalControl(int signal)
+{
+    if(fgJob.pid > 0)
+    {
+        myJobs[totalNoOfJobs].pid = fgJob.pid;
+        strcpy(myJobs[totalNoOfJobs].jobsNames,fgJob.jobsNames);
+        myJobs[totalNoOfJobs].jobsIndex = totalNoOfJobs;
+        myJobs[totalNoOfJobs].jobsStatus = 1;
 
+        myJobsTemp[totalNoOfJobs].pid = fgJob.pid;
+        strcpy(myJobsTemp[totalNoOfJobs].jobsNames, fgJob.jobsNames);
+        myJobsTemp[totalNoOfJobs].jobsIndex = totalNoOfJobs;
+        myJobsTemp[totalNoOfJobs].jobsStatus = 1;
+
+        totalNoOfJobs++;
+
+  		kill(fgJob.pid , signal);
+        fgJob.pid = -1;
+        printf("\n");
+    }
+    else
+    {
+        printf("\nNo foreground process found\n");
+        printf("Press [ENTER] to continue\n");
+    }
+}

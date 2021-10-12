@@ -15,21 +15,4 @@ void tokenizer(char *token[], char *s, char *delimParameter, long long int *tota
     *total = index;
 }
 
-// void tokenizer(char *token[], char *str, char *delim, ll *total){     // tokenises str into token by delim
-//     token[0] = strtok(str,delim);
-//     ll index = 0;
-//     while(token[index]!=NULL){
-//         token[++index] = strtok(NULL,delim);
-//     }
-//     *total = index;
-// }
-
-// Public function to return the tokens and split into tokens
-// long long int addEachCommandsArgs(char *listOfArgs, char *str) {
-//     tokenizer(listOfArgs, str, " \t", ); 
-// }
-
-// void getAllTokenizedCommandsList() {
-//     tokenizer(listOfCommands, inputGiven, ";\n", noOfCommands);
-// }
 

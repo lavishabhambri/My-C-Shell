@@ -12,11 +12,19 @@ void getInputToTerminal(){
     }
 
     // Taking Input
-    int checkError = gets(inputGiven);
-    if (checkError == -1) {
+    char * checkError = fgets(inputGiven, SIZE, stdin);
+
+    // int checkError = gets(inputGiven);
+    if (checkError < 0) {
         printf("Oops! Input Error!\n");
         return;
+    } 
+    // Condition for CtrlD
+    else if (checkError == 0) {
+        printf("\n");
+        exit(0);
     }
+    
 
     // Checking the clear condition
     if (strcmp(inputGiven, "clear") == 0) {
@@ -26,7 +34,7 @@ void getInputToTerminal(){
 }
 
 // stores the current dir to currdir
-void getCurrentDirectory(){   
+void getCurrentDirectory() {   
     if(getcwd(currentDir, SIZE) == NULL) {
         perror("");
         exit(0);
@@ -42,8 +50,7 @@ void getPseudoHome() {
 
 
 int main()
-{
-
+{   
     //Getting the username of the current active user
     getlogin_r(username, sizeof(username)); 
 
@@ -60,18 +67,20 @@ int main()
     strcpy(lastCD, pseudoHome);
      
     // make total no. of processes = 0
-    totalNoOfProcesses = 0;
+    totalNoOfJobs = 0;
+    noOfForeProcesses = 0;
+
+    // Loads the history file
+    loadHistory(); 
 
     while (1)
     {   
         // check if any child process terminated
-        signal(SIGCHLD, sigchildHandler);                         
+        signal(SIGCHLD, sigchildHandler); 
 
-        // check if SIGTSTP signal is raised (Ctrl + Z) - simply ignore it
-        signal(SIGTSTP, ctrlZHandler);                         
-        
-        // check if SIGINT signal is raised (Ctrl + C) - simply ignore it
-        signal(SIGINT, ctrlCHandler);                           
+        // Signal Handlers for CtrlC and Z 
+        signal(SIGINT, signalControl);
+        signal(SIGTSTP, signalControl);                                               
 
         // Get current directory
         getCurrentDirectory();
@@ -82,8 +91,14 @@ int main()
         // Takes the full command with the arguments
         getInputToTerminal();
 
+
         // Checks commands
         commandHandler();
+
+        // writes to history
+        if(changeHistory()==0) {                                    
+            continue;
+        }
  
     }
     return 0;
